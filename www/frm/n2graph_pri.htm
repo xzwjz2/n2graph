@@ -1,0 +1,53 @@
+<?php include ('frm/cab.htm');?>
+<body class="w3-theme-d3">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>   
+<?php $titulo='NAGIOS TO GRAPH';include ('frm/tit.htm');?>   
+<form id="form" action="<?php echo MODULO;?>.php" method="post">
+   <input type="hidden" name="ftoken" id="ftoken" value="<?php echo $_REQUEST['ftoken']; ?>">
+   <input type="hidden" name="modulo" id="modulo" value="<?php echo MODULO;?>">
+   <div class="w3-container w3-responsive w3-margin-top w3-margin-bottom w3-white">
+   <table class="w3-table w3-border w3-bordered w3-small w3-card w3-margin-top w3-margin-bottom w3-theme-l5" style="width: 600px; margin-left: auto; margin-right: auto">
+      <thead>
+         <tr class="w3-theme">
+            <th class="w3-padding-tiny">Host</th>
+            <th class="w3-padding-tiny">Servicio</th>
+            <th class="w3-padding-tiny">M&eacute;trica</th>
+            <th class="w3-padding-tiny w3-center">Gr&aacute;fico</th>
+         </tr>
+      </thead>
+      <?php
+      foreach($metricas as $key=>$val){ ?>
+      <tr>
+         <?php if ($val['mh']==true){ echo '<td class="w3-padding-small w3-border-right" rowspan="',$hosts[$val['host']],'" style="vertical-align: middle;">',$val['host'],'</td>';}?>
+         <?php if ($val['ms']==true){ echo '<td class="w3-padding-small w3-border-right" rowspan="',$services[$val['host'].$val['service']],'" style="vertical-align: middle;">',$val['service'],'</td>';}?>
+         <td class="w3-padding-small"><?php echo $val['metrica'] ;?></td>
+         <td class="w3-padding-small w3-center"><button class="w3-btn w3-padding-0 w3-hover-theme" type="button" id="botgraph" style="background-color: transparent; background-image:url('img/graph_16b.png'); background-repeat: no-repeat; width: 16px; height: 16px" onclick="vergraph('<?php echo $val['idmser'];?>');">&nbsp;</button></td>
+      </tr>   
+      <?php } ?>
+   </table>
+   </div>
+   <!--Popup para mostrar gráfico -->
+   <div id="psel" class="w3-modal" style="padding-top: 50px; display:none">
+      <div class="w3-modal-content w4-card-4 w3-container" style="width: 1000px">
+         <div class="w3-container">
+            <br>
+            <div id="pselcon" class="w3-border w3-white"><canvas id="graf1"></canvas></div>
+         </div>
+         <div class="w3-container w3-center w3-margin-top">
+            <input class="w3-btn w3-theme w3-hover-theme w3-padding-small w3-round-large" type="button" value="<" onclick="vergraph(0,'botatras');">
+            <input class="w3-btn w3-theme w3-hover-theme w3-padding-small w3-round-large" type="button" value="-" onclick="vergraph(0,'botmenos');">
+            <input class="w3-btn w3-theme w3-hover-theme w3-padding-small w3-round-large" type="button" value="Volver" onclick="document.getElementById('psel').style.display='none';">
+            <input class="w3-btn w3-theme w3-hover-theme w3-padding-small w3-round-large" type="button" value="+" onclick="vergraph(0,'botmas');">
+            <input class="w3-btn w3-theme w3-hover-theme w3-padding-small w3-round-large" type="button" value=">" onclick="vergraph(0,'botadelante');">
+            <input class="w3-btn w3-theme w3-hover-theme w3-padding-small w3-round-large" type="button" value=">>" onclick="vergraph(0,'botfin');">
+         </div>
+         <br>
+      </div>
+   </div>
+</form>
+<footer class="w3-theme-d3">
+   <p class="w3-small w3-center"><span class="w3-margin-right">Enhanced by <a href="https://www.chartjs.org" title="Chart.js"><img src="img/chartjs-logo.svg" style="width: 32px"></a> <a href="https://www.w3schools.com/w3css" title="W3.css"><img src="img/w3schools.ico" style="width: 32px"></a></span><span class="w3-margin-left">Copyleft 2020 <a href="mailto: doserredesign@gmail.com"><img src="img/2rr-biz_logo.png" style="width: 32px"></a> <b>2rr Design</b></span></p>
+</footer>
+</body>
+<script type="text/javascript" src="js/n2graph.js"></script>
+</html>

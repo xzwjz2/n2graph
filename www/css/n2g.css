@@ -1,0 +1,48 @@
+.w3-theme-l5 {color:#000 !important; background-color:#f0f0ff !important}
+.w3-theme-l4 {color:#000 !important; background-color:#ccccff !important}
+.w3-theme-l3 {color:#fff !important; background-color:#9999ff !important}
+.w3-theme-l2 {color:#fff !important; background-color:#6666ff !important}
+.w3-theme-l1 {color:#fff !important; background-color:#3333ff !important}
+.w3-theme-d1 {color:#fff !important; background-color:#0000e6 !important}
+.w3-theme-d2 {color:#fff !important; background-color:#0000cc !important}
+.w3-theme-d3 {color:#fff !important; background-color:#0000b3 !important}
+.w3-theme-d4 {color:#fff !important; background-color:#000099 !important}
+.w3-theme-d5 {color:#fff !important; background-color:#000080 !important}
+
+.w3-theme-light {color:#000 !important; background-color:#f0f0ff !important}
+.w3-theme-dark {color:#fff !important; background-color:#000080 !important}
+.w3-theme-action {color:#fff !important; background-color:#000080 !important}
+
+.w3-theme {color:#fff !important; background-color:#0000ff !important}
+.w3-text-theme {color:#0000ff !important}
+.w3-border-theme {border-color:#0000ff !important}
+
+.w3-hover-theme:hover {color:#fff !important; background-color:#0000ff !important}
+.w3-hover-text-theme:hover {color:#0000ff !important}
+.w3-hover-border-theme:hover {border-color:#0000ff !important}
+
+/* Correcciones y agregados de color */
+.w3-theme-hover {color:#fff !important; background-color:#ff7f00 !important}
+.w3-theme-hover:hover {color:#fff !important; background-color: #0000ff !important}
+.w3-text-hover {color:#ff7f00 !important}
+
+/* Formatos usados en la grilla */
+.w3-margin-horz-3{margin-left:3px!important; margin-right:3px!important}
+.w3-fg-tit{text-align: center; display:inline-block}
+.w3-fg-lin{vertical-align:top; display:inline-block; overflow:hidden}
+
+/* Otros formatos */
+.w3-padding-tiny{padding:2px 4px!important}
+.w3-padding-0{padding:0!important}
+.w3-margin-0{margin:0!important}
+.w3-margin-3{margin:3px!important}
+.w3-cont-l:after,.w3-cont-l:before,.w3-cont-c:after,.w3-cont-c:before,.w3-cont-r:after,.w3-cont-r:before {content:"";display:table;clear:both}
+.w3-cont-l {padding: 0.01em 8px 0.01em 16px}
+.w3-cont-c {padding: 0.01em 8px 0.01em 8px}
+.w3-cont-r {padding: 0.01em 16px 0.01em 8px}
+@media (max-width: 768px){
+.w3-cont-l {padding: 0.01em 4px 0.01em 4px}
+.w3-cont-c {padding: 0.01em 4px 0.01em 4px}
+.w3-cont-r {padding: 0.01em 4px 0.01em 4px}
+.w3-container {padding: 0.01em 4px 0.01em 4px}
+}
