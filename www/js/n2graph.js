@@ -10,7 +10,7 @@ if (this.status == 200) {
 var rp=JSON.parse(this.responseText);
 window.michart.data.labels=rp.rotulos;
 window.michart.data.datasets=[{ borderColor: '#00ff00', backgroundColor: '#00ff00', data: rp.avg, label: 'Promedio'},{ borderColor: '#ff7f00', backgroundColor: '#ff7f00', label: 'Mínimo', data: rp.min},{ borderColor: '#0000ff', backgroundColor: '#0000ff', label: 'Máximo', data: rp.max}];
-window.michart.options={animation: {duration:0}, legend: {position: 'bottom'}, aspectRatio: 1.8,title: { display: true, text: rp.titulo, fontSize:24, fontColor: '#0000ff'},tooltips: {mode: 'index', intersect: true}, scales:{xAxes: [{display: true, scaleLabel:{display: true,labelString: rp.ejex }}],yAxes:[{display:true, beginAtZero: true,scaleLabel:{display:true,labelString:'Valor'}}] } };        
+window.michart.options={animation: {duration:0}, legend: {position: 'bottom'}, aspectRatio: 1.8,title: { display: true, text: rp.titulo, fontSize:24, fontColor: '#0000ff'},tooltips: {mode: 'index', intersect: true}, scales:{xAxes: [{display: true, scaleLabel:{display: true,labelString: rp.ejex }}],yAxes:[{display:true, ticks:{suggestedMin:0},scaleLabel:{display:true,labelString:'Valor'}}] } };        
 window.michart.update();
 document.getElementById("psel").style.display='block';
 } else if (this.status== 401){
