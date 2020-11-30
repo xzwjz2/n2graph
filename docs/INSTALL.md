@@ -22,5 +22,20 @@ mkdir -m 777 /var/nagios/dat
 find /var/nagios -exec chown nagios {} \;
 find /var/nagios -exec chgrp nagios {} \;
 ```
+2. Modify Nagios configuration files. First commands file:
+```
+nano /usr/local/nagios/etc/objects/commands.cfg
+```
+Locate the performance data commands and update (or add if they not exists) them with:
+```
+define command {
+    command_name    process-host-perfdata
+    command_line    /bin/mv /var/nagios/host-perfdata.log /var/nagios/dat/$DATE$-$TIME$-host.dat
+}
+define command {
+    command_name    process-service-perfdata
+    command_line    /bin/mv /var/nagios/service-perfdata.log /var/nagios/dat/$DATE$-$TIME$-service.dat
+}
+```
 
-   
+
