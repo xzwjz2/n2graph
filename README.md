@@ -5,4 +5,4 @@ This tool requires a LAMP stack. It's under development, although the code is fu
 
 ### Screenshots
 
-[Main screen](docs/ng2_ex1.png)
+[Main screen](docs/n2g_ex1.png)
