@@ -134,6 +134,7 @@ Many files are left behind during normal operation:
 /var/nagios/n2gproc_error_AAAA_MM_DD.log
 ```
 You should setup your own cleaning process of these files according with your own retention period criteria. You can use cron tasks or logrotate tool.
+
 8. Troubleshooting.
 I will update this section soon, after I receive feedback or trouble cases. In the meantime, you can write me or load a bug case for any doubt or problem you have.
 
