@@ -107,6 +107,7 @@ and add the line:
 */10 * * * * /usr/bin/php -f /usr/local/n2graph/n2gproc.php >/dev/null 2>&1
 ```
 In this case, files will be processed every 10 minutes (as we set up the same for Nagios). It's no mandatory to be the same period, you can setup cron to process to a different period, but it has no much sense. 
+
 6. Setup Apache. First customize config file:
 ```
 nano apache2/n2graph_ap2.conf
