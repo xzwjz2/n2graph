@@ -84,7 +84,9 @@ Look for at the end of the file the line `CREATE USER 'n2guser'@'localhost' IDEN
 ```
 nano cfg/config.php
 ```
-Replace the content of `$user` and `$pass` variables with appropiate information. Now, create the database:
+Replace the content of constants `USER` and `PASS` with appropiate information. Also select the language to use in legends and messages setting the constant `LANG`. Currently only two languages are supported: English (`en`) and Spanish (`es`).
+
+Now, create the database:
 ```
 mysql <dbf/create_n2graph.sql
 ```
