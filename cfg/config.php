@@ -1,8 +1,11 @@
 <?php
 /* Credentials to access database */
-$host='localhost';
-$user='root';
-$pass='password';
+define ('HOST','localhost');
+define ('USER','n2guser');
+define ('PASS','password');
 /* Route to Nagios performance files */
-$ruta='/var/nagios/dat';
+define ('RUTA','/var/nagios/dat');
+/* Set language and load language file*/
+define ('LANG','en');
+include ('/usr/local/n2graph/cfg/'.LANG.'.php');
 ?>

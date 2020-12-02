@@ -103,36 +103,33 @@ for ($ii=0; $ii<$mdiv;$ii++){
 include ('../cfg/config.php');
 mysqli_report(MYSQLI_REPORT_STRICT); 
 try{
-   $idbase = new mysqli($host, $user, $pass, 'n2graph');
+   $idbase = new mysqli(HOST, USER, PASS, 'n2graph');
    $idbase->set_charset('utf8mb4');
 }
 catch (mysqli_sql_exception $e){
    flog('n2graph_error',$e->getMessage());
-   flog('n2graph_error','Error al abrir la base de datos');
-   ferror('Error en la base de datos');
+   flog('n2graph_error',ERROROP);
+   ferror(ERRORDB);
    exit;
 }   
 
 
-$titulo='SERVICIO NO EXISTE';
+$titulo=GTITNE;
 $sql='select * from mser where idmser='.$num;
 try {
    if (!$result=mysqli_query($idbase,$sql)){
-      throw new Exception ('Error en la lectura de datos',2);
+      throw new Exception (ERRORRD,2);
    }
    if (mysqli_num_rows($result)==1){
       $row=mysqli_fetch_assoc($result);
       $titulo=$row['host'].'-'.$row['service'].'-'.$row['metrica'];
    }
-//   while ($row=mysqli_fetch_assoc($result)){
-//      $dat[$row['clave']]=array('min'=>$row['min'],'max'=>$row['max'],'avg'=>$row['avg'],'vacio'=>false);
-//   }
    mysqli_free_result($result);
 }
 catch (Exception $e){
    if (isset($sql)){flog('n2graph_error',$sql);}
    flog('n2graph_error',$e->getMessage());
-   ferror('Error en la base de datos');
+   ferror(ERRORDB);
    exit;
 }
 
@@ -140,7 +137,7 @@ $sql='select substring(from_unixtime(fchmet),1,'.$lk.') as \'clave\',min(valor) 
 //flog('debug',$sql);
 try {
    if (!$result=mysqli_query($idbase,$sql)){
-      throw new Exception ('Error en la lectura de datos',2);
+      throw new Exception (ERRORRD,2);
    }
    while ($row=mysqli_fetch_assoc($result)){
       $dat[$row['clave']]=array('min'=>$row['min'],'max'=>$row['max'],'avg'=>$row['avg'],'vacio'=>false);
@@ -150,7 +147,7 @@ try {
 catch (Exception $e){
    if (isset($sql)){flog('n2graph_error',$sql);}
    flog('n2graph_error',$e->getMessage());
-   ferror('Error en la base de datos');
+   ferror(ERRORDB);
    exit;
 }
 $res=array();
@@ -158,23 +155,23 @@ foreach ($dat as $key=>$val){
    switch ($frac) {
    case 1:
       $res['rotulos'][]=substr($key,-5,5);
-      $res['ejex']='Cada 1 minuto, desde: '.date('Y-m-d H:i',$fchini).'  a  '.date('Y-m-d H:i',$_SESSION['n2graph']['fchfin']);
+      $res['ejex']=GFOOT1.date('Y-m-d H:i',$fchini).GFOOTTO.date('Y-m-d H:i',$_SESSION['n2graph']['fchfin']);
       break;
    case 2:
-     $res['rotulos'][]=substr($key,-4,4).'0';
-     $res['ejex']='Cada 10 minutos, desde: '.substr(date('Y-m-d H:i',$fchini),0,15).'0  a  '.substr(date('Y-m-d H:i',$_SESSION['n2graph']['fchfin']),0,15).'0';
-     break;
+      $res['rotulos'][]=substr($key,-4,4).'0';
+      $res['ejex']=GFOOT2.substr(date('Y-m-d H:i',$fchini),0,15).GFOOTTO.substr(date('Y-m-d H:i',$_SESSION['n2graph']['fchfin']),0,15).'0';
+      break;
    case 3:
       $res['rotulos'][]=substr($key,-2,2).':00';
-      $res['ejex']='Cada 1 hora, desde: '.date('Y-m-d H:00',$fchini).'  a  '.date('Y-m-d H:00',$_SESSION['n2graph']['fchfin']);
+      $res['ejex']=GFOOT3.date('Y-m-d H:00',$fchini).GFOOTTO.date('Y-m-d H:00',$_SESSION['n2graph']['fchfin']);
       break;
    case 4:
       $res['rotulos'][]=substr($key,-5,5);
-      $res['ejex']='Cada 1 día, desde: '.date('Y-m-d',$fchini).'  a  '.date('Y-m-d',$_SESSION['n2graph']['fchfin']);
+      $res['ejex']=GFOOT4.date('Y-m-d',$fchini).GFOOTTO.date('Y-m-d',$_SESSION['n2graph']['fchfin']);
       break;
    case 5:
       $res['rotulos'][]=substr($key,2,5);
-      $res['ejex']='Cada 1 mes, desde: '.date('Y-m',$fchini).'  a  '.date('Y-m',$_SESSION['n2graph']['fchfin']);
+      $res['ejex']=GFOOT5.date('Y-m',$fchini).GFOOTTO.date('Y-m',$_SESSION['n2graph']['fchfin']);
       break;   
    }
    if ($val['vacio']==false){

@@ -6,9 +6,19 @@
 session_start();
 //Establezco nombre del programa
 define('MODULO','n2graph');
-
+include ('../cfg/config.php');
 //Abro conexión a la base de datos
-$idbase=fabremy('n2graph');
+mysqli_report(MYSQLI_REPORT_STRICT); 
+try{
+   $idbase = new mysqli(HOST, USER, PASS, 'n2graph');
+   $idbase->set_charset('utf8mb4');
+}
+catch (mysqli_sql_exception $e){
+   flog('n2graph_error',$e->getMessage());
+   flog('n2graph_error',ERROROP);
+   ferror(ERRORDB);
+   exit;
+}   
 
 //limpiar requerimientos por el code-injection
 limpiarequest();
@@ -50,7 +60,7 @@ function n2graph_pri($ep,&$idbase){
    try {
       $sql='select * from mser order by host,service,metrica';
       if (!$result=mysqli_query($idbase,$sql)){
-         throw new Exception ('Error en la lectura de datos',2);
+         throw new Exception (ERRORRD,2);
       }
       while ($row=mysqli_fetch_assoc($result)){
          if (!array_key_exists($row['host'],$hosts)){$hosts[$row['host']]=1;$row['mh']=true;}else{$hosts[$row['host']]++;$row['mh']=false;}
@@ -62,29 +72,16 @@ function n2graph_pri($ep,&$idbase){
    catch (Exception $e){
       if (isset($sql)){flog('n2graph_error',$sql);}
       flog('n2graph_error',$e->getMessage());
-      ferror('Hubo errores al buscar los datos');
+      ferror(ERRORRD);
+      exit;
    }
    include ('frm/n2graph_pri.htm');
-   //print_r($datos);
-   //print_r($dg);
 }
-/* Abre la conexión a la base de datos */
-function fabremy($base){
-   include ('../cfg/config.php');
-mysqli_report(MYSQLI_REPORT_STRICT); 
-try{
-$sqltemp = new mysqli($host, $user, $pass, $base);
-$sqltemp->set_charset('utf8mb4');
-return $sqltemp;
-}
-catch (mysqli_sql_exception $e){
-flog('n2graph_error',$e->getMessage());
-flog('n2graph_error','Error al abrir la base de datos');
-die('Ha ocurrido un error grave y no puedo continuar con la ejecución del programa');
-}   
-}
+
+
 function flog($slog,$tlog){$log='/var/nagios/'.$slog.'_'.date('Y_m_d').'.log';
 error_log(PHP_EOL.date('Y-m-d H:i:s').';'.$tlog,3,$log);}
+
 function limpiarequest(){
 foreach ($_REQUEST as $key => $value){
 if (is_array($value)){
@@ -114,5 +111,5 @@ $pes='*';
 $_SESSION[MODULO]['ultpes']='*';
 }
 }
-function ferror($ep){$_SESSION[MODULO]['msgerr']=$ep;}
+function ferror($ep){include ('frm/error.htm');}
 ?>
