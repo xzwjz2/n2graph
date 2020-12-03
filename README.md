@@ -8,10 +8,15 @@ The goal of this project is to provide a tool that doesn't require expertise to 
 ### Features
 
 -Metrics can be showed grouped in periods of: minutes, 10 minutes, hours, days and months.
+
 -Minimum, maximum and average metrics.
+
 -Can navigate forward and backward in time.
+
 -Collects and shows also check times. 
+
 -Developed in PHP and uses Chart.js and W3.CSS libraries.
+
 -Requires a LAMP stack.
 
 
