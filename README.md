@@ -19,13 +19,6 @@ The goal of this project is to provide a tool that doesn't require expertise to 
 
 -Requires a LAMP stack.
 
-
-
-This tool requires a LAMP stack. It's under development, although this version is fully functional. It's a very minimal one. You can find installation instructions [here](docs/INSTALL.md).
-
-I hope this tool will be useful to you.
-Enjoy!
-
 ### Screenshots
 
 [Main screen](docs/n2g_ex1.png) [Graph screen](docs/n2g_ex2.png)
