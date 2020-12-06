@@ -23,9 +23,9 @@ The goal of this project is to provide a tool that doesn't require expertise to 
 
 ![Main screen](docs/n2g_ex1.png) ![Graph screen](docs/n2g_ex2.png) ![Config Screen](docs/n2g_ex3.png)
 
-### Install
+### Install or Update
 
-Install instructions can be found [here](docs/INSTALL.md).
+Install instructions can be found [here](docs/INSTALL.md). Update instructions from previous versions can be found [here](docs/UPDATE.md).
 
 ### Last words
 
