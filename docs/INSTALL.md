@@ -100,7 +100,7 @@ find /usr/local/n2graph -exec chmod 755 {} \;
 find /usr/local/n2graph -exec chown nagios {} \;
 find /usr/local/n2graph -exec chgrp nagios {} \;
 ```
-5. Setup a cron task. This task will process performance data files and write that information to mysql database.
+5. Setup a cron task (for nagios user). This task will process performance data files and write that information to mysql database.
 ```
 crontab -u nagios -e
 ```
@@ -132,8 +132,8 @@ Many files are left behind during normal operation:
 ```
 /var/nagios/dat/AAA-MM-DD-HH:MM:SS-service.dat.procesado
 /var/nagios/dat/AAA-MM-DD-HH:MM:SS-host.dat.procesado
-/var/nagios/n2gproc_AAAA_MM_DD.log
-/var/nagios/n2gproc_error_AAAA_MM_DD.log
+/var/nagios/XXXXXX_AAAA_MM_DD.log
+/var/nagios/XXXXXX_error_AAAA_MM_DD.log
 ```
 You should setup your own cleaning process of these files according with your own retention period criteria. You can use cron tasks or logrotate tool. For example, you can set it up to:
 ```
