@@ -18,7 +18,19 @@ wget  https://github.com/xzwjz2/n2graph/archive/vX.X.X.tar.gz
 tar -xvf vX.X.X.tar.gz
 cd n2graph-vX.X.X
 ```
+3. Update database (same script than creation):
 
-(under working)
+`mysql <dbf/create_n2graph.sql` or `mysql -u <root or other admin user> -p <dbf/create_n2graphsql`
 
+4. Install files (
+```
+cp -r -f cfg/??.php /usr/local/n2graph/cfg
+cp -r -f www /usr/local/n2graph/www
+cp -f n2gproc.php /usr/local/n2graph
+find /usr/local/n2graph -exec chmod 755 {} \;
+find /usr/local/n2graph -exec chown nagios {} \;
+find /usr/local/n2graph -exec chgrp nagios {} \;
+```
+5. Restart background process:
 
+`crontab -u nagios -e` and uncomment the line commented before.
