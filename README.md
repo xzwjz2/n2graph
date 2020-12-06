@@ -21,7 +21,7 @@ The goal of this project is to provide a tool that doesn't require expertise to 
 
 ### Screenshots
 
-![Main screen](docs/n2g_ex1.png) ![Graph screen](docs/n2g_ex2.png) ![Config Screen](docs/ng2_ex3.png)
+![Main screen](docs/n2g_ex1.png) ![Graph screen](docs/n2g_ex2.png) ![Config Screen](docs/n2g_ex3.png)
 
 ### Install
 
