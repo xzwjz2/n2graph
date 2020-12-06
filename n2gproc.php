@@ -50,7 +50,7 @@ function busca_met(&$idbase,&$lin,$metrica,$valor){
       if (mysqli_num_rows($result)==0){
          //la métrica no existe, la agrego
          mysqli_free_result($result);
-         $sql='insert into mser (host,service,metrica) values (\''.$lin[1].'\',\''.$lin[2].'\',\''.$metrica.'\')';
+         $sql='insert into mser (host,service,metrica,metalias) values (\''.$lin[1].'\',\''.$lin[2].'\',\''.$metrica.'\',\''.$metrica.'\')';
          if (!$result2=mysqli_query($idbase,$sql)){
             throw new Exception (ERRORWD,2);
          }

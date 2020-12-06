@@ -1,11 +1,11 @@
 <?php
 /*****************************************************
-* N2GRAPH: Gráficos de Nagios
+* N2GCONFIG: Customization
 *****************************************************/
 //Establecimiento de sesion
 session_start();
 //Establezco nombre del programa
-define('MODULO','n2graph');
+define('MODULO','n2gconfig');
 include ('../cfg/config.php');
 //Abro conexión a la base de datos
 mysqli_report(MYSQLI_REPORT_STRICT); 
@@ -14,8 +14,8 @@ try{
    $idbase->set_charset('utf8mb4');
 }
 catch (mysqli_sql_exception $e){
-   flog('n2graph_error',$e->getMessage());
-   flog('n2graph_error',ERROROP);
+   flog('n2gconfig_error',$e->getMessage());
+   flog('n2gconfig_error',ERROROP);
    ferror(ERRORDB);
    exit;
 }   
@@ -35,20 +35,20 @@ if (isset($_SESSION[MODULO]['ftoken']) and isset($_REQUEST['ftoken'])
       unset($_SESSION[MODULO]);
       header('location: ./');
       exit;
-   }elseif ($ultpan=='n2graph_pri'){
+   }elseif ($ultpan=='n2gconfig_pri'){
       if (isset($_REQUEST['botfiltrar'])){
-         n2graph_pri('1');
+         n2gconfig_pri('1');
          exit;
       }
    }
 }
-n2graph_pri('0',$idbase);
+n2gconfig_pri('0',$idbase);
 exit;
 /***************************************************
-* N2GRAPH_PRI: 
+* N2GCONFIG_PRI: Initial Screen 
 ***************************************************/
-function n2graph_pri($ep,&$idbase){
-   $_SESSION[MODULO]['ultpan']='n2graph_pri';
+function n2gconfig_pri($ep,&$idbase){
+   $_SESSION[MODULO]['ultpan']='n2gconfig_pri';
    if ($ep=='0'){
       //primera vez que ingresa, inicializo el token
       $_REQUEST['ftoken']=md5(date('U'));
@@ -70,12 +70,12 @@ function n2graph_pri($ep,&$idbase){
       mysqli_free_result($result);
    }
    catch (Exception $e){
-      if (isset($sql)){flog('n2graph_error',$sql);}
-      flog('n2graph_error',$e->getMessage());
+      if (isset($sql)){flog('n2gconfig_error',$sql);}
+      flog('n2gconfig_error',$e->getMessage());
       ferror(ERRORRD);
       exit;
    }
-   include ('frm/n2graph_pri.htm');
+   include ('frm/n2gconfig_pri.htm');
 }
 
 

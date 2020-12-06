@@ -3,6 +3,7 @@ define ('TABTITHOS','Servidor');
 define ('TABTITSER','Servicio');
 define ('TABTITMET','M&eacute;trica');
 define ('TABTITGRA','Gr&aacute;fico');
+define ('TITCFG','Configurar');
 define ('FOOTENH','Mejorado con');
 define ('GBOTRET','Volver');
 define ('GFOOT1','Cada 1 minuto, desde: ');
@@ -16,4 +17,8 @@ define ('ERRORRD','Error leyendo datos');
 define ('ERRORWD','Error escribiendo datos');
 define ('ERRORDB','Error en la base de datos');
 define ('ERROROP','Error al abrir la base de datos');
+define ('GUNIDAD','Valores');
+define ('TABCFGALI','Alias de la Métrica');
+define ('TABCFGUNI','Unidad');
+define ('BOTCERRAR','Cerrar');
 ?>

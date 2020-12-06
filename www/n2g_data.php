@@ -115,6 +115,7 @@ catch (mysqli_sql_exception $e){
 
 
 $titulo=GTITNE;
+$unidad=GUNIDAD;
 $sql='select * from mser where idmser='.$num;
 try {
    if (!$result=mysqli_query($idbase,$sql)){
@@ -122,7 +123,8 @@ try {
    }
    if (mysqli_num_rows($result)==1){
       $row=mysqli_fetch_assoc($result);
-      $titulo=$row['host'].'-'.$row['service'].'-'.$row['metrica'];
+      $titulo=$row['host'].'-'.$row['service'].'-'.$row['metalias'];
+      if (!empty($row['unidad'])){$unidad=$row['unidad'];}
    }
    mysqli_free_result($result);
 }
@@ -184,12 +186,14 @@ foreach ($dat as $key=>$val){
       $res['max'][]='NaN';
    }   
 }
+$res['unidad']=$unidad;
 $res['titulo']=$titulo;
 echo json_encode($res);
 
 
 function flog($slog,$tlog){$log='/var/nagios/'.$slog.'_'.date('Y_m_d').'.log';
 error_log(PHP_EOL.date('Y-m-d H:i:s').';'.$tlog,3,$log);}
+
 function ferror($ep){
    $res=array();
    $res['rotulos'][]=1;
@@ -197,6 +201,7 @@ function ferror($ep){
    $res['avg'][]=1;
    $res['min'][]=1;
    $res['max'][]=1;
+   $res['unidad']='';
    $res['titulo']=$ep;
    echo json_encode($res);
 }
