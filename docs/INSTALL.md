@@ -12,7 +12,7 @@
 
 1. These instructions are based on an installation on a Debian 10, with Nagios in folder /usr/local/nagios. If you have something different, maybe you'll have to use some different paths or file names. User and group are 'nagios' and 'nagios'.
 
-## Steps.
+## Steps
 
 1. Create folders and give access. Use superuser (root) privileges.
 ```
@@ -80,16 +80,16 @@ cd n2graph-vX.X.X
 ```
 nano dbf/create_n2graph.sql
 ```
-Look for at the end of the file the line `CREATE USER 'n2guser'@'localhost' IDENTIFIED BY 'password';` and setup the password (please use a "strong" password). You can also change the name of the user if you like. Now put the same user and password information in php code:
+Look for at the end of the file the line `CREATE USER IF NOT EXISTS 'n2guser'@'localhost' IDENTIFIED BY 'password';` and setup the password (please use a "strong" password). You can also change the name of the user if you like. Now put the same user and password information in php code:
 ```
 nano cfg/config.php
 ```
 Replace the content of constants `USER` and `PASS` with appropiate information. Also select the language to use in legends and messages setting the constant `LANG`. Currently only two languages are supported: English (`en`) and Spanish (`es`).
 
 Now, create the database:
-```
-mysql <dbf/create_n2graph.sql
-```
+
+`mysql <dbf/create_n2graph.sql` (maybe you should use `mysql -u root -p <dbf/create_n2graphsql`, also maybe you should use a user other than `root`, depending on how you configured your mysql). 
+
 Now install files:
 ```
 mkdir -m 755 /usr/local/n2graph
@@ -135,10 +135,18 @@ Many files are left behind during normal operation:
 /var/nagios/n2gproc_AAAA_MM_DD.log
 /var/nagios/n2gproc_error_AAAA_MM_DD.log
 ```
-You should setup your own cleaning process of these files according with your own retention period criteria. You can use cron tasks or logrotate tool.
+You should setup your own cleaning process of these files according with your own retention period criteria. You can use cron tasks or logrotate tool. For example, you can set it up to:
+```
+crontab -u root -e
+```
+And add following lines:
+```
+1 0 * * * /usr/bin/find /var/nagios -type f -name "*.log" -mtime +7 -exec rm -f {} \;
+2 0 * * * /usr/bin/find /var/nagios/dat -type f -name "*.procesado" -mtime +0 -exec rm -f {} \;
+```
+## Troubleshooting.
 
-8. Troubleshooting.
-I will update this section soon, after I receive feedback or trouble cases. In the meantime, you can write me or load a bug case for any doubt or problem you have.
+You can find some guidelines [here](TROUBLESHOOT.md), or you can write me or load a bug case for any doubt or problem you have.
 
 
 
