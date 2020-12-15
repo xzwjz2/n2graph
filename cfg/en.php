@@ -21,4 +21,8 @@ define ('GUNIDAD','Values');
 define ('TABCFGALI','Metric Alias');
 define ('TABCFGUNI','Unit');
 define ('BOTCERRAR','Close');
+define ('GTITMIN','Minimum');
+define ('GTITMAX','Maximum');
+define ('GTITAVG','Average');
+define ('GSTATUS','Status');
 ?>

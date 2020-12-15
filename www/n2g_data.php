@@ -87,7 +87,7 @@ $dat=array();
 $fchfin=$fchini;
 for ($ii=0; $ii<$mdiv;$ii++){
    $key=substr(date('Y-m-d H:i',$fchfin),0,$lk);
-   $dat[$key]=array('min'=>0,'max'=>0,'avg'=>0,'vacio'=>true);
+   $dat[$key]=array('min'=>0,'max'=>0,'avg'=>0,'vacio'=>true,'ok'=>0,'warning'=>0,'critical'=>0,'unknown'=>0);
    switch ($frac) {
       case 5:
          $fchfin=strtotime(date('Y-m-d',$fchfin).' +1 month');
@@ -111,8 +111,7 @@ catch (mysqli_sql_exception $e){
    flog('n2graph_error',ERROROP);
    ferror(ERRORDB);
    exit;
-}   
-
+}
 
 $titulo=GTITNE;
 $unidad=GUNIDAD;
@@ -123,7 +122,13 @@ try {
    }
    if (mysqli_num_rows($result)==1){
       $row=mysqli_fetch_assoc($result);
-      $titulo=$row['host'].'-'.$row['service'].'-'.$row['metalias'];
+      if (empty($row['service'])){
+         $titulo=$row['host'].'-'.$row['metalias'];
+         $tipo='h';
+      }else{
+         $titulo=$row['host'].'-'.$row['service'].'-'.$row['metalias'];
+         $tipo='s';
+      }
       if (!empty($row['unidad'])){$unidad=$row['unidad'];}
    }
    mysqli_free_result($result);
@@ -142,7 +147,10 @@ try {
       throw new Exception (ERRORRD,2);
    }
    while ($row=mysqli_fetch_assoc($result)){
-      $dat[$row['clave']]=array('min'=>$row['min'],'max'=>$row['max'],'avg'=>$row['avg'],'vacio'=>false);
+      $dat[$row['clave']]['min']=$row['min'];
+      $dat[$row['clave']]['max']=$row['max'];
+      $dat[$row['clave']]['avg']=$row['avg'];
+      $dat[$row['clave']]['vacio']=false;
    }
    mysqli_free_result($result);
 }
@@ -174,7 +182,7 @@ foreach ($dat as $key=>$val){
    case 5:
       $res['rotulos'][]=substr($key,2,5);
       $res['ejex']=GFOOT5.date('Y-m',$fchini).GFOOTTO.date('Y-m',$_SESSION['n2graph']['fchfin']);
-      break;   
+      break;
    }
    if ($val['vacio']==false){
       $res['avg'][]=$val['avg'];
@@ -184,12 +192,152 @@ foreach ($dat as $key=>$val){
       $res['avg'][]='NaN';
       $res['min'][]='NaN';
       $res['max'][]='NaN';
-   }   
+   }
 }
+
+$sql='select substring(from_unixtime(fchmet),1,'.$lk.') as \'clave\',estado,count(*) as \'cant\' from hmet where fchmet>='.$fchini.' and fchmet <'.$fchfin.' and idmser='.$num.' group by substring(from_unixtime(fchmet),1,'.$lk.'),estado';
+//flog('debug',$sql);
+try {
+   if (!$result=mysqli_query($idbase,$sql)){
+      throw new Exception (ERRORRD,2);
+   }
+   while ($row=mysqli_fetch_assoc($result)){
+      switch ($row['estado']) {
+         case 'OK':
+            $dat[$row['clave']]['ok']=1;
+            break;
+         case 'WARNING':
+            $dat[$row['clave']]['warning']=2;
+            break;
+         case 'CRITICAL':
+            $dat[$row['clave']]['critical']=4;
+            break;
+         case 'UNKNOWN':
+            $dat[$row['clave']]['unknown']=8;
+            break;
+         case 'UP':
+            $dat[$row['clave']]['ok']=1;
+            break;
+         case 'DOWN':
+            $dat[$row['clave']]['critical']=2;
+            break;
+         case 'UNREACHABLE':
+            $dat[$row['clave']]['unknown']=4;
+            break;
+      }
+   }
+   mysqli_free_result($result);
+}
+catch (Exception $e){
+   if (isset($sql)){flog('n2graph_error',$sql);}
+   flog('n2graph_error',$e->getMessage());
+   ferror(ERRORDB);
+   exit;
+}
+foreach ($dat as $key=>$val){
+   if ($tipo=='s'){
+      $suma=$val['ok']+$val['warning']+$val['critical']+$val['unknown'];
+      switch ($suma){
+         case 1:
+            $res['ok'][]=4;$res['w'][]=0;$res['c'][]=0;$res['u'][]=0;
+            break;
+         case 2:
+            $res['ok'][]=0;$res['w'][]=3;$res['c'][]=0;$res['u'][]=0;
+            break;
+         case 4:
+            $res['ok'][]=0;$res['w'][]=0;$res['c'][]=2;$res['u'][]=0;
+            break;
+         case 8:
+            $res['ok'][]=0;$res['w'][]=0;$res['c'][]=0;$res['u'][]=1;
+            break;
+         case 3:
+            $res['ok'][]=1;$res['w'][]=3;$res['c'][]=0;$res['u'][]=0;
+            break;
+         case 5:
+            $res['ok'][]=2;$res['w'][]=0;$res['c'][]=2;$res['u'][]=0;
+            break;
+         case 6:
+            $res['ok'][]=0;$res['w'][]=1;$res['c'][]=2;$res['u'][]=0;
+            break;
+         case 7:
+            $res['ok'][]=1;$res['w'][]=1;$res['c'][]=2;$res['u'][]=0;
+            break;
+         case 9:
+            $res['ok'][]=3;$res['w'][]=0;$res['c'][]=0;$res['u'][]=1;
+            break;
+         case 10:
+            $res['ok'][]=0;$res['w'][]=2;$res['c'][]=0;$res['u'][]=1;
+            break;
+         case 11:
+            $res['ok'][]=1;$res['w'][]=2;$res['c'][]=0;$res['u'][]=1;
+            break;
+         case 12:
+            $res['ok'][]=0;$res['w'][]=0;$res['c'][]=1;$res['u'][]=1;
+            break;
+         case 13:
+            $res['ok'][]=2;$res['w'][]=0;$res['c'][]=1;$res['u'][]=1;
+            break;
+         case 14:
+            $res['ok'][]=0;$res['w'][]=1;$res['c'][]=1;$res['u'][]=1;
+            break;
+         case 15:
+            $res['ok'][]=1;$res['w'][]=1;$res['c'][]=1;$res['u'][]=1;
+            break;
+         default:
+            $res['ok'][]=0;$res['w'][]=0;$res['c'][]=0;$res['u'][]=0;
+            break;
+      }
+   }else{
+      $suma=$val['ok']+$val['critical']+$val['unknown'];
+      switch ($suma){
+         case 1:
+            $res['ok'][]=3;$res['w'][]=0;$res['c'][]=0;$res['u'][]=0;
+            break;
+         case 2:
+            $res['ok'][]=0;$res['w'][]=0;$res['c'][]=2;$res['u'][]=0;
+            break;
+         case 4:
+            $res['ok'][]=0;$res['w'][]=0;$res['c'][]=0;$res['u'][]=1;
+            break;
+         case 3:
+            $res['ok'][]=1;$res['w'][]=0;$res['c'][]=2;$res['u'][]=0;
+            break;
+         case 5:
+            $res['ok'][]=2;$res['w'][]=0;$res['c'][]=0;$res['u'][]=1;
+            break;
+         case 6:
+            $res['ok'][]=0;$res['w'][]=0;$res['c'][]=2;$res['u'][]=1;
+            break;
+         case 7:
+            $res['ok'][]=1;$res['w'][]=0;$res['c'][]=2;$res['u'][]=1;
+            break;
+         default:
+            $res['ok'][]=0;$res['w'][]=0;$res['c'][]=0;$res['u'][]=0;
+            break;
+      }
+   }
+}
+$res['tipo']=$tipo;
+if ($tipo=='s'){
+   $res['to']='Ok';
+   $res['tw']='Warning';
+   $res['tc']='Critical';
+   $res['tu']='Unknown';
+}else{
+   $res['to']='Up';
+   $res['tw']='';
+   $res['tc']='Down';
+   $res['tu']='Unreachable';
+}
+$res['tmin']=GTITMIN;
+$res['tmax']=GTITMAX;
+$res['tavg']=GTITAVG;
+$res['stat']=GSTATUS;
 $res['unidad']=$unidad;
 $res['titulo']=$titulo;
-echo json_encode($res);
+//flog('debug2',print_r($dat,true));
 
+echo json_encode($res);
 
 function flog($slog,$tlog){$log='/var/nagios/'.$slog.'_'.date('Y_m_d').'.log';
 error_log(PHP_EOL.date('Y-m-d H:i:s').';'.$tlog,3,$log);}
@@ -203,6 +351,19 @@ function ferror($ep){
    $res['max'][]=1;
    $res['unidad']='';
    $res['titulo']=$ep;
+   $res['tipo']='h';
+   $res['ok'][]=0;
+   $res['w'][]=0;
+   $res['c'][]=0;
+   $res['u'][]=0;
+   $res['to']=' ';
+   $res['tw']=' ';
+   $res['tc']=' ';
+   $res['tu']=' ';
+   $res['tmin']=' ';
+   $res['tmax']=' ';
+   $res['tavg']=' ';
+   $res['stat']=' ';
    echo json_encode($res);
 }
 ?>

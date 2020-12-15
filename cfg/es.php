@@ -21,4 +21,9 @@ define ('GUNIDAD','Valores');
 define ('TABCFGALI','Alias de la Métrica');
 define ('TABCFGUNI','Unidad');
 define ('BOTCERRAR','Cerrar');
+define ('GTITMIN','Mínimo');
+define ('GTITMAX','Máximo');
+define ('GTITAVG','Promedio');
+define ('GSTATUS','Estado');
+
 ?>
