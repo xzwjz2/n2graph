@@ -51,8 +51,8 @@ process_performance_data=1
 host_perfdata_file=/var/nagios/host-perfdata.log
 service_perfdata_file=/var/nagios/service-perfdata.log
 
-host_perfdata_file_template=$LASTHOSTCHECK$|$HOSTNAME$||$HOSTSTATE$|$HOSTATTEMPT$|$HOSTEXECUTIONTIME$|$HOSTLATENCY$|$HOSTOUTPUT$|$HOSTPERF$
-service_perfdata_file_template=$LASTSERVICECHECK$|$HOSTNAME$|$SERVICEDESC$|$SERVICESTATE$|$SERVICEATTEMPT$|$SERVICEEXECUTIONTIME$|$SERVICE$
+host_perfdata_file_template=$LASTHOSTCHECK$|$HOSTNAME$||$HOSTSTATE$|$HOSTATTEMPT$|$HOSTEXECUTIONTIME$|$HOSTLATENCY$|$HOSTOUTPUT$|$HOSTPERFDATA$
+service_perfdata_file_template=$LASTSERVICECHECK$|$HOSTNAME$|$SERVICEDESC$|$SERVICESTATE$|$SERVICEATTEMPT$|$SERVICEEXECUTIONTIME$|$SERVICELATENCY$|$SERVICEOUTPUT$|$SERVICEPERFDATA$
 
 host_perfdata_file_mode=a
 service_perfdata_file_mode=a
@@ -88,7 +88,7 @@ Replace the content of constants `USER` and `PASS` with appropiate information. 
 
 Now, create the database:
 
-`mysql <dbf/create_n2graph.sql` (maybe you should use `mysql -u root -p <dbf/create_n2graphsql`, also maybe you should use a user other than `root`, depending on how you configured your mysql). 
+`mysql <dbf/create_n2graph.sql` (maybe you should use `mysql -u root -p <dbf/create_n2graph.sql`, also maybe you should use a user other than `root`, depending on how you configured your mysql). 
 
 Now install files:
 ```
