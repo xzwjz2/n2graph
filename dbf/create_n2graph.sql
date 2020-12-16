@@ -25,16 +25,16 @@ CREATE TABLE IF NOT EXISTS `mser` (
   `host` varchar(100) NOT NULL COMMENT 'Nombre del host',
   `service` varchar(100) NOT NULL COMMENT 'Nombre del servicio',
   `metrica` varchar(100) NOT NULL COMMENT 'Nombre de la métrica',
-  `metalias` varchar(100) NOT NULL COMMENT 'Alias de la métrica',
-  `unidad` varchar(25) NOT NULL COMMENT 'Unidades de medición',
+  `metalias` varchar(100) NOT NULL DEFAULT '' COMMENT 'Alias de la métrica',
+  `unidad` varchar(25) NOT NULL DEFAULT '' COMMENT 'Unidades de medición',
   PRIMARY KEY (`idmser`),
   KEY `host_service_metalias` (`host`,`service`,`metalias`(50))
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COMMENT='Maestro de Servicios';
 
 -- This in case upgrading from version 0.9.2 and below
 ALTER TABLE `mser` 
-ADD COLUMN IF NOT EXISTS `metalias` varchar(100) NOT NULL COMMENT 'Alias de la métrica',
-ADD COLUMN IF NOT EXISTS `unidad` varchar(25) NOT NULL COMMENT 'Unidades de medición';
+ADD COLUMN IF NOT EXISTS `metalias` varchar(100) NOT NULL DEFAULT '' COMMENT 'Alias de la métrica',
+ADD COLUMN IF NOT EXISTS `unidad` varchar(25) NOT NULL DEFAULT '' COMMENT 'Unidades de medición';
 
 UPDATE `mser` SET `metalias`=`metrica` WHERE `metalias`='';
 
