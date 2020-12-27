@@ -64,7 +64,8 @@ function n2graph_pri($ep,&$idbase){
       }
       while ($row=mysqli_fetch_assoc($result)){
          if (!array_key_exists($row['host'],$hosts)){$hosts[$row['host']]=1;$row['mh']=true;}else{$hosts[$row['host']]++;$row['mh']=false;}
-         if (!array_key_exists($row['host'].$row['service'],$services)){$services[$row['host'].$row['service']]=1;$row['ms']=true;}else{$services[$row['host'].$row['service']]++; $row['ms']=false;}   
+         if (!array_key_exists($row['host'].$row['service'],$services)){$services[$row['host'].$row['service']]=1;$row['ms']=true;}else{$services[$row['host'].$row['service']]++; $row['ms']=false;}
+         $row['cest']='#000000';   
          $metricas[]=$row;
       }
       mysqli_free_result($result);
@@ -74,6 +75,59 @@ function n2graph_pri($ep,&$idbase){
       flog('n2graph_error',$e->getMessage());
       ferror(ERRORRD);
       exit;
+   }
+   //Read status
+   $nomarc=STTSPATH.'/status.dat';
+   if (file_exists($nomarc)){
+      $fh=fopen($nomarc,'r');
+      if ($fh!==false){
+         $hoststatus=false;
+         $servicestatus=false;
+         $ac=count($metricas);
+         while ($lin=fgets($fh)){
+            if (substr($lin,0,10)=='hoststatus'){
+               $hoststatus=true;$servicestatus=false;$service='';
+            }elseif (substr($lin,0,13)=='servicestatus'){
+               $servicestatus=true;$hoststatus=false;
+            }
+            if (($pos=strpos($lin,'host_name='))!==false){
+               $host=trim(substr($lin,$pos+10,100));
+            }elseif (($pos=strpos($lin,'service_description='))!==false){
+               $service=trim(substr($lin,$pos+20,100));
+            }elseif (($pos=strpos($lin,'current_state='))!==false){
+               $estado=substr($lin,$pos+14,1);
+               foreach($metricas as $key=>$val){
+                  if ($val['host']==$host and $val['service']==$service){
+                     if ($hoststatus){
+                        switch ($estado){
+                           case '0':
+                              $metricas[$key]['cest']='#00ff00';
+                              break;
+                           case '1': 
+                              $metricas[$key]['cest']='#ff0000';
+                              break;
+                        }      
+                     }elseif($servicestatus){
+                        switch ($estado){
+                           case '0':
+                              $metricas[$key]['cest']='#00ff00';
+                              break;
+                           case '1': 
+                              $metricas[$key]['cest']='#ffff00';
+                              break;
+                           case '2': 
+                              $metricas[$key]['cest']='#ff0000';
+                              break;
+                        }      
+                     }
+                     break;
+                  }
+               }
+               $servicestatus=false;$hoststatus=false;
+            }
+         }
+         fclose($fh);
+      }
    }
    include ('frm/n2graph_pri.htm');
 }

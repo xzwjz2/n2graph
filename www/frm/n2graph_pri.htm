@@ -22,8 +22,8 @@
             <?php
             foreach($metricas as $key=>$val){ ?>
             <tr>
-               <?php if ($val['mh']==true){ echo '<td class="w3-padding-small w3-border-right" rowspan="',$hosts[$val['host']],'" style="vertical-align: middle;">',$val['host'],'</td>';}?>
-               <?php if ($val['ms']==true){ echo '<td class="w3-padding-small w3-border-right" rowspan="',$services[$val['host'].$val['service']],'" style="vertical-align: middle;">',$val['service'],'</td>';}?>
+               <?php if ($val['mh']==true){ echo '<td class="w3-padding-small w3-border-right" rowspan="',$hosts[$val['host']],'" style="vertical-align: middle;"><i class="fa fa-circle w3-large" style="color: ',$val['cest'],'"></i>&nbsp;',$val['host'],'</td>';}?>
+               <?php if ($val['ms']==true){ echo '<td class="w3-padding-small w3-border-right" rowspan="',$services[$val['host'].$val['service']],'" style="vertical-align: middle;">',($val['tipmet']=='s'?'<i class="fa fa-circle w3-large" style="color: '.$val['cest'].'"></i>&nbsp;':''),$val['service'],'</td>';}?>
                <td class="w3-padding-small"><?php echo $val['metalias'] ;?></td>
                <td class="w3-padding-small w3-center"><button class="w3-btn w3-padding-0 w3-hover-theme" type="button" id="botgraph" style="background-color: transparent; background-image:url('img/graph_16b.png'); background-repeat: no-repeat; width: 16px; height: 16px" onclick="vergraph('<?php echo $val['idmser'];?>');">&nbsp;</button></td>
             </tr>   

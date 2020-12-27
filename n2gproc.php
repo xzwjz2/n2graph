@@ -17,9 +17,10 @@ catch (mysqli_sql_exception $e){
 foreach ($archivos as $key=>$val){
    $hn=fopen(RUTA.'/'.$val,'r');
    $ii=0;$kk=0;
+   $tipmet=(strpos($val,'host')===false?'s':'h');
    while ($lin=fgetcsv($hn,0,'|')){
       $ii++;
-      busca_met($idbase,$lin,'chktime',$lin[5]);
+      busca_met($idbase,$lin,'chktime',$lin[5],$tipmet);
       $kk++;
       //Busco las otras métricas
       if (!empty($lin[8])){
@@ -29,7 +30,7 @@ foreach ($archivos as $key=>$val){
             $resmet=substr($val2,stripos($val2,'=')+1,1000);
             $valores=explode(';',$resmet);
             if(substr_count($valores[0],',')>0){$valores[0]=str_replace(',','.',$valores[0]);}
-            busca_met($idbase,$lin,$nommet,filter_var($valores[0],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION));
+            busca_met($idbase,$lin,$nommet,filter_var($valores[0],FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION),$tipmet);
             $kk++;
          }
       }
@@ -41,7 +42,7 @@ foreach ($archivos as $key=>$val){
 /* End of proc */
 
 /* Function to process each metrics */
-function busca_met(&$idbase,&$lin,$metrica,$valor){
+function busca_met(&$idbase,&$lin,$metrica,$valor,&$tipmet){
    try{
       $sql='select idmser from mser where host=\''.$lin[1].'\' and service=\''.$lin[2].'\' and metrica=\''.$metrica.'\'';
       if (!$result=mysqli_query($idbase,$sql)){
@@ -50,7 +51,7 @@ function busca_met(&$idbase,&$lin,$metrica,$valor){
       if (mysqli_num_rows($result)==0){
          //la métrica no existe, la agrego
          mysqli_free_result($result);
-         $sql='insert into mser (host,service,metrica,metalias) values (\''.$lin[1].'\',\''.$lin[2].'\',\''.$metrica.'\',\''.$metrica.'\')';
+         $sql='insert into mser (host,service,metrica,metalias,tipmet) values (\''.$lin[1].'\',\''.$lin[2].'\',\''.$metrica.'\',\''.$metrica.'\',\''.$tipmet.'\')';
          if (!$result2=mysqli_query($idbase,$sql)){
             throw new Exception (ERRORWD,2);
          }
@@ -59,6 +60,13 @@ function busca_met(&$idbase,&$lin,$metrica,$valor){
          $row=mysqli_fetch_assoc($result);
          $idmser=$row['idmser'];
          mysqli_free_result($result);
+         //si el tipo de métrica está vacío, lo actualizo
+         if (empty($row['tipmet'])){
+            $sql='update mser set tipmet=\''.$tipmet.'\' where idmser='.$idmser;
+            if (!$result2=mysqli_query($idbase,$sql)){
+               throw new Exception (ERRORWD,2);
+            }
+         }
       }
       $sql='select * from hmet where idmser='.$idmser.' and fchmet='.$lin[0];
       if (!$result2=mysqli_query($idbase,$sql)){

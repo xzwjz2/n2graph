@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `mser` (
   `metrica` varchar(100) NOT NULL COMMENT 'Nombre de la métrica',
   `metalias` varchar(100) NOT NULL DEFAULT '' COMMENT 'Alias de la métrica',
   `unidad` varchar(25) NOT NULL DEFAULT '' COMMENT 'Unidades de medición',
+  `tipmet` varchar(1) NOT NULL DEFAULT '' COMMENT 'Tipo de métrica (host/service)',
   PRIMARY KEY (`idmser`),
   KEY `host_service_metalias` (`host`,`service`,`metalias`(50))
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COMMENT='Maestro de Servicios';
@@ -34,9 +35,12 @@ CREATE TABLE IF NOT EXISTS `mser` (
 -- This in case upgrading from version 0.9.2 and below
 ALTER TABLE `mser` 
 ADD COLUMN IF NOT EXISTS `metalias` varchar(100) NOT NULL DEFAULT '' COMMENT 'Alias de la métrica',
-ADD COLUMN IF NOT EXISTS `unidad` varchar(25) NOT NULL DEFAULT '' COMMENT 'Unidades de medición';
+ADD COLUMN IF NOT EXISTS `unidad` varchar(25) NOT NULL DEFAULT '' COMMENT 'Unidades de medición',
+ADD COLUMN IF NOT EXISTS `tipmet` varchar(1) NOT NULL DEFAULT '' COMMENT 'Tipo de métrica (host/service)';
 
 UPDATE `mser` SET `metalias`=`metrica` WHERE `metalias`='';
+UPDATE `mser` SET `tipmet`='h' WHERE `tipmet`='' and `service`='';
+UPDATE `mser` SET `tipmet`='s' WHERE `tipmet`='' and `service`<>'';
 
 ALTER TABLE `mser` 
 DROP INDEX IF EXISTS `host_service_metrica`;

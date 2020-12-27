@@ -11,6 +11,10 @@ The goal of this project is to provide a tool that doesn't require expertise to 
 
 -Minimum, maximum and average metrics.
 
+-Host/service state history (Nagios trends) in the same graphic so it can be correlated visually performance values with states.
+
+-Shows current host/service states in main screen.
+
 -Can navigate forward and backward in time.
 
 -Collects and shows also check times. 

@@ -37,7 +37,7 @@ define command {
     command_line    /bin/mv /var/nagios/service-perfdata.log /var/nagios/dat/$DATE$-$TIME$-service.dat
 }
 ```
-Then we setup nagios.cfg
+Then setup nagios.cfg
 ```
 nano /usr/local/nagios/etc/nagios.cfg
 ```
@@ -69,12 +69,12 @@ Finally, reload Nagios:
 ```
 systemctl reload nagios.service
 ```
-3. Download N2Graph package to a temporary location (replace X.X.X with version number)
+3. Download N2Graph package to a temporary location (if you wish to install a different version, replace 2.0.0)
 ```
 cd /tmp
-wget  https://github.com/xzwjz2/n2graph/archive/vX.X.X.tar.gz
-tar -xvf vX.X.X.tar.gz
-cd n2graph-vX.X.X
+wget  https://github.com/xzwjz2/n2graph/archive/v2.0.0.tar.gz
+tar -xvf v2.0.0.tar.gz
+cd n2graph-v2.0.0
 ```
 4. We have to customize some files before to install them. First, we setup the user and password to access the database:
 ```
@@ -93,8 +93,8 @@ Now, create the database:
 Now install files:
 ```
 mkdir -m 755 /usr/local/n2graph
-cp -r cfg /usr/local/n2graph/cfg
-cp -r www /usr/local/n2graph/www
+cp -r cfg /usr/local/n2graph
+cp -r www /usr/local/n2graph
 cp n2gproc.php /usr/local/n2graph
 find /usr/local/n2graph -exec chmod 755 {} \;
 find /usr/local/n2graph -exec chown nagios {} \;
